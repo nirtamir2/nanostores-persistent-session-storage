@@ -1,6 +1,6 @@
 {
   "name": "@nirtamir2/nanostores-persistent-session-storage",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A store for Nano Stores state manager to keep data in sessionStorage",
   "keywords": [
     "nano",

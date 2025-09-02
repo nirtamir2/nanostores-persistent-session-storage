@@ -1,6 +1,10 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.1
+* The fork starts here 🍴 
+* Change `localStorge` default to `sessionStorage` and increase size limit to `282 B`
+
 ## 1.1.0
 * Added ability to delete key from storage in `encode`.
 * Fixed reaction on atom’s key removal.
