@@ -3,7 +3,7 @@ import { test } from 'node:test'
 
 import { persistentAtom, persistentMap } from '../index.js'
 
-test('works without localStorage for map', () => {
+test('works without sessionStorage for map', () => {
   let map = persistentMap<{ one?: string; two?: string }>('a:', {
     one: '1'
   })
@@ -12,7 +12,7 @@ test('works without localStorage for map', () => {
   deepStrictEqual(map.get(), { one: '1', two: '2' })
 })
 
-test('works without localStorage for atom', () => {
+test('works without sessionStorage for atom', () => {
   let store = persistentAtom<string>('a', '1')
   store.listen(() => {})
   store.set('2')

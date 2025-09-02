@@ -14,7 +14,7 @@ const windowPersistentEvents = {
   }
 }
 
-setPersistentEngine(localStorage, windowPersistentEvents)
+setPersistentEngine(sessionStorage, windowPersistentEvents)
 
 let settings = persistentMap<{
   favorite?: string

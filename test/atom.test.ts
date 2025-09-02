@@ -12,23 +12,23 @@ import {
   setPersistentEngine,
   windowPersistentEvents
 } from '../index.js'
-import { emitLocalStorage } from './utils.js'
+import { emitsessionStorage } from './utils.js'
 
 let atom: WritableAtom<string | undefined>
 
 afterEach(() => {
-  localStorage.clear()
+  sessionStorage.clear()
   cleanStores(atom)
-  setPersistentEngine(localStorage, windowPersistentEvents)
+  setPersistentEngine(sessionStorage, windowPersistentEvents)
 })
 
-test('loads data from localStorage', () => {
-  localStorage.a = '1'
+test('loads data from sessionStorage', () => {
+  sessionStorage.a = '1'
   atom = persistentAtom('a', '2')
   equal(atom.get(), '1')
 })
 
-test('saves to localStorage', () => {
+test('saves to sessionStorage', () => {
   atom = persistentAtom<string | undefined>('b')
 
   let events: (string | undefined)[] = []
@@ -38,11 +38,11 @@ test('saves to localStorage', () => {
   equal(atom.get(), undefined)
 
   atom.set('1')
-  deepStrictEqual(localStorage, { b: '1' })
+  deepStrictEqual(sessionStorage, { b: '1' })
   deepStrictEqual(events, ['1'])
 
   atom.set(undefined)
-  deepStrictEqual(localStorage, {})
+  deepStrictEqual(sessionStorage, {})
   deepStrictEqual(events, ['1', undefined])
 })
 
@@ -54,12 +54,12 @@ test('listens for other tabs', () => {
     events.push(value)
   })
 
-  emitLocalStorage('c', '1')
+  emitsessionStorage('c', '1')
 
   deepStrictEqual(events, ['1'])
   equal(atom.get(), '1')
 
-  emitLocalStorage('c', null)
+  emitsessionStorage('c', null)
   equal(atom.get(), undefined)
 })
 
@@ -72,7 +72,7 @@ test('listens for key cleaning', () => {
   })
   atom.set('init')
 
-  localStorage.clear()
+  sessionStorage.clear()
   window.dispatchEvent(new StorageEvent('storage', {}))
 
   deepStrictEqual(events, ['init', undefined])
@@ -87,20 +87,20 @@ test('ignores other tabs on request', () => {
     events.push(value)
   })
 
-  emitLocalStorage('c2', '1')
+  emitsessionStorage('c2', '1')
 
   deepStrictEqual(events, [])
   equal(atom.get(), undefined)
 })
 
-test('saves to localStorage in disabled state', () => {
+test('saves to sessionStorage in disabled state', () => {
   atom = persistentAtom('d')
 
   atom.set('1')
-  equal(localStorage.d, '1')
+  equal(sessionStorage.d, '1')
 
   atom.set(undefined)
-  equal(localStorage.d, undefined)
+  equal(sessionStorage.d, undefined)
 })
 
 test('allows to change encoding', () => {
@@ -112,12 +112,12 @@ test('allows to change encoding', () => {
   locale.listen(() => {})
   locale.set(['ru', 'RU'])
 
-  deepStrictEqual(localStorage.getItem('locale'), '["ru","RU"]')
+  deepStrictEqual(sessionStorage.getItem('locale'), '["ru","RU"]')
 
-  emitLocalStorage('locale', '["fr","CA"]')
+  emitsessionStorage('locale', '["fr","CA"]')
 
   deepStrictEqual(locale.get(), ['fr', 'CA'])
-  deepStrictEqual(localStorage.getItem('locale'), '["fr","CA"]')
+  deepStrictEqual(sessionStorage.getItem('locale'), '["fr","CA"]')
 })
 
 test('changes engine', () => {
@@ -187,7 +187,7 @@ test('goes back to initial on key removal', () => {
     events.push(value)
   })
 
-  emitLocalStorage('key', null)
+  emitsessionStorage('key', null)
   deepStrictEqual(events, ['initial'])
   equal(atom.get(), 'initial')
 })
@@ -202,11 +202,11 @@ test('goes back to initial on key removal with custom stringifier', () => {
     }
   })
   equal(store.get(), false)
-  equal(typeof localStorage.bool, 'undefined')
+  equal(typeof sessionStorage.bool, 'undefined')
 
   store.set(true)
-  equal(localStorage.bool, 'yes')
+  equal(sessionStorage.bool, 'yes')
 
-  emitLocalStorage('bool', null)
+  emitsessionStorage('bool', null)
   equal(store.get(), false)
 })

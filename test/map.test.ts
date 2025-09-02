@@ -15,7 +15,7 @@ import {
   useTestStorageEngine,
   windowPersistentEvents
 } from '../index.js'
-import { emitLocalStorage } from './utils.js'
+import { emitsessionStorage } from './utils.js'
 
 function clone(data: object): object {
   return JSON.parse(JSON.stringify(data))
@@ -24,20 +24,20 @@ function clone(data: object): object {
 let map: MapStore<{ one?: string; two?: string }>
 
 afterEach(() => {
-  localStorage.clear()
+  sessionStorage.clear()
   cleanStores(map)
-  setPersistentEngine(localStorage, windowPersistentEvents)
+  setPersistentEngine(sessionStorage, windowPersistentEvents)
 })
 
-test('loads data from localStorage', () => {
-  localStorage.setItem('a:one', '1')
+test('loads data from sessionStorage', () => {
+  sessionStorage.setItem('a:one', '1')
   map = persistentMap<{ one?: string; two?: string }>('a:', {
     two: '2'
   })
   deepStrictEqual(map.get(), { one: '1', two: '2' })
 })
 
-test('saves to localStorage', () => {
+test('saves to sessionStorage', () => {
   map = persistentMap('b:', {})
 
   let events: object[] = []
@@ -47,15 +47,15 @@ test('saves to localStorage', () => {
 
   map.setKey('one', '1')
   map.setKey('two', '2')
-  deepStrictEqual(localStorage, { 'b:one': '1', 'b:two': '2' })
+  deepStrictEqual(sessionStorage, { 'b:one': '1', 'b:two': '2' })
   deepStrictEqual(events, [{ one: '1' }, { one: '1', two: '2' }])
 
   map.set({ one: '11' })
-  deepStrictEqual(localStorage, { 'b:one': '11' })
+  deepStrictEqual(sessionStorage, { 'b:one': '11' })
   deepStrictEqual(events, [{ one: '1' }, { one: '1', two: '2' }, { one: '11' }])
 
   map.setKey('one', undefined)
-  deepStrictEqual(localStorage, {})
+  deepStrictEqual(sessionStorage, {})
   deepStrictEqual(events, [{ one: '1' }, { one: '1', two: '2' }, { one: '11' }, {}])
 })
 
@@ -67,12 +67,12 @@ test('listens for other tabs', () => {
     events.push(clone(value))
   })
 
-  emitLocalStorage('c:one', '1')
+  emitsessionStorage('c:one', '1')
 
   deepStrictEqual(events, [{ one: '1' }])
   deepStrictEqual(map.get(), { one: '1' })
 
-  emitLocalStorage('c:one', null)
+  emitsessionStorage('c:one', null)
   deepStrictEqual(map.get(), {})
 })
 
@@ -86,7 +86,7 @@ test('listens for local storage cleaning', () => {
   map.setKey('one', '1')
   map.setKey('two', '2')
 
-  localStorage.clear()
+  sessionStorage.clear()
   window.dispatchEvent(new StorageEvent('storage', {}))
 
   deepStrictEqual(events, [{ one: '1' }, { one: '1', two: '2' }, {}])
@@ -101,20 +101,20 @@ test('ignores other tabs on request', () => {
     events.push(clone(value))
   })
 
-  emitLocalStorage('c2:one', '1')
+  emitsessionStorage('c2:one', '1')
 
   deepStrictEqual(events, [])
   deepStrictEqual(map.get(), {})
 })
 
-test('saves to localStorage in disabled state', () => {
+test('saves to sessionStorage in disabled state', () => {
   map = persistentMap('d:', {})
 
   map.setKey('one', '1')
-  equal(localStorage['d:one'], '1')
+  equal(sessionStorage['d:one'], '1')
 
   map.setKey('one', undefined)
-  equal(localStorage['d:one'], undefined)
+  equal(sessionStorage['d:one'], undefined)
 })
 
 test('allows to change encoding', () => {
@@ -134,12 +134,12 @@ test('allows to change encoding', () => {
   settings.listen(() => {})
   settings.setKey('locale', ['ru', 'RU'])
 
-  equal(localStorage.getItem('settings:locale'), 'ru,RU')
+  equal(sessionStorage.getItem('settings:locale'), 'ru,RU')
 
-  emitLocalStorage('settings:locale', 'fr,CA')
+  emitsessionStorage('settings:locale', 'fr,CA')
 
   deepStrictEqual(settings.get().locale, ['fr', 'CA'])
-  equal(localStorage.getItem('settings:locale'), 'fr,CA')
+  equal(sessionStorage.getItem('settings:locale'), 'fr,CA')
 })
 
 test('has test API', async () => {

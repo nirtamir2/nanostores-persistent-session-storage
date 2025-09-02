@@ -26,9 +26,9 @@ export interface PersistentEvents {
 }
 
 /**
- * Replace localStorage to keep persistent data.
+ * Replace sessionStorage to keep persistent data.
  *
- * @param storage An object with localStorage API.
+ * @param storage An object with sessionStorage API.
  * @param events An object with `addEventListener` and `removeEventListener`.
  */
 export function setPersistentEngine(
@@ -65,10 +65,10 @@ export type PersistentOptions =
 
 interface PersistentMapFactory {
   /**
-   * Keep key-value data in localStorage.
+   * Keep key-value data in sessionStorage.
    *
    * ```ts
-   * import { persistentMap } from '@nanostores/persistent'
+   * import { persistentMap } from '@nirtamir2/nanostores-persistent-session-storage'
    *
    * export const settings = persistentMap<{
    *   theme: 'dark' | 'light'
@@ -76,8 +76,8 @@ interface PersistentMapFactory {
    * }>('settings:', { theme: 'light' })
    * ```
    *
-   * @param prefix Key prefix in localStorage.
-   * @param initial Initial value on missed data in localStorage.
+   * @param prefix Key prefix in sessionStorage.
+   * @param initial Initial value on missed data in sessionStorage.
    * @param opts Store options.
    * @return The store.
    */
@@ -97,18 +97,18 @@ export const persistentMap: PersistentMapFactory
 
 interface PersistentAtomFactory {
   /**
-   * Store a value in localStorage.
+   * Store a value in sessionStorage.
    *
    * For key-value objects use {@link persistentMap}.
    *
    * ```ts
-   * import { persistentAtom } from '@nanostores/persistent'
+   * import { persistentAtom } from '@nirtamir2/nanostores-persistent-session-storage'
    *
    * export const locale = persistentAtom<string>('locale', 'en')
    * ```
    *
-   * @param name Key name in localStorage.
-   * @param initial Initial value on missed data in localStorage.
+   * @param name Key name in sessionStorage.
+   * @param initial Initial value on missed data in sessionStorage.
    * @param opts Store options.
    * @return The store.
    */
@@ -130,7 +130,7 @@ export const persistentAtom: PersistentAtomFactory
  * Enable fake storage to test persistent stores.
  *
  * ```js
- * import { useTestStorageEngine } from '@nanostores/persistent'
+ * import { useTestStorageEngine } from '@nirtamir2/nanostores-persistent-session-storage'
  *
  * beforeAll(() => {
  *   useTestStorageEngine()
@@ -147,7 +147,7 @@ export function useTestStorageEngine(): void
  *   useTestStorageEngine,
  *   setTestStorageKey,
  *   cleanTestStorage
- * } from '@nanostores/persistent'
+ * } from '@nirtamir2/nanostores-persistent-session-storage'
  *
  * beforeAll(() => {
  *   useTestStorageEngine()
@@ -163,7 +163,7 @@ export function useTestStorageEngine(): void
  * })
  * ```
  *
- * @param key Full name of key in localStorage.
+ * @param key Full name of key in sessionStorage.
  * @param newValue New value of the key.
  */
 export function setTestStorageKey(
@@ -179,7 +179,7 @@ export function setTestStorageKey(
  *   useTestStorageEngine,
  *   cleanTestStorage,
  *   getTestStorage,
- * } from '@nanostores/persistent'
+ * } from '@nirtamir2/nanostores-persistent-session-storage'
  *
  * beforeAll(() => {
  *   useTestStorageEngine()
@@ -201,7 +201,7 @@ export function getTestStorage(): Record<string, string>
  * Clean test storage used to test persistent stores.
  *
  * ```js
- * import { cleanTestStorage } from '@nanostores/persistent'
+ * import { cleanTestStorage } from '@nirtamir2/nanostores-persistent-session-storage'
  *
  * afterEach(() => {
  *   cleanTestStorage()

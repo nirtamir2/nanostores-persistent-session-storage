@@ -4,27 +4,27 @@ let window = new Window()
 global.window = window as any
 global.StorageEvent = window.StorageEvent as any
 
-global.localStorage = {} as any
-Object.defineProperty(localStorage, 'getItem', {
+global.sessionStorage = {} as any
+Object.defineProperty(sessionStorage, 'getItem', {
   enumerable: false,
   value(key: string) {
-    return localStorage[key] || null
+    return sessionStorage[key] || null
   }
 })
-Object.defineProperty(global.localStorage, 'setItem', {
+Object.defineProperty(global.sessionStorage, 'setItem', {
   enumerable: false,
   value(key: string, value: null | string) {
-    localStorage[key] = `${value}`
+    sessionStorage[key] = `${value}`
   }
 })
-Object.defineProperty(localStorage, 'clear', {
+Object.defineProperty(sessionStorage, 'clear', {
   enumerable: false,
   value() {
-    Object.keys(localStorage).map(key => delete localStorage[key])
+    Object.keys(sessionStorage).map(key => delete sessionStorage[key])
   }
 })
 
-Object.defineProperty(global, '_localStorage', {
-  value: global.localStorage,
+Object.defineProperty(global, '_sessionStorage', {
+  value: global.sessionStorage,
   writable: false
 })

@@ -1,8 +1,8 @@
-export function emitLocalStorage(key: string, newValue: null | string): void {
+export function emitsessionStorage(key: string, newValue: null | string): void {
   if (newValue === null) {
-    delete localStorage[key]
+    delete sessionStorage[key]
   } else {
-    localStorage[key] = newValue
+    sessionStorage[key] = newValue
   }
   global.window.dispatchEvent(
     new global.StorageEvent('storage', { key, newValue })

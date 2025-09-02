@@ -1,19 +1,21 @@
+This is a fork of [@nanostores/persistent](https://github.com/nanostores/persistent) that meant to be used alongside `@nanostores/persistent` and allows you to configure a different store than `@nanostores/persistent`. The default source type here is also changed to `sessionStorage` instead of `localStorage`. See more details on this [issue](https://github.com/nanostores/persistent/issues/54)
+
 # Nano Stores Persistent
 
 <img align="right" width="92" height="92" title="Nano Stores logo"
      src="https://nanostores.github.io/nanostores/logo.svg">
 
-A smart store for [Nano Stores] state manager to keep data in `localStorage`
+A smart store for [Nano Stores] state manager to keep data in `sessionStorage`
 and synchronize changes between browser tabs.
 
-* **Small.** from 281 bytes (minified and brotlied).
+* **Small.** from 282 bytes (minified and brotlied).
   Zero dependencies. It uses [Size Limit] to control size.
 * It has good **TypeScript**.
 * Framework agnostic. It supports SSR.
-  `localStorage` can be switched to another storage.
+  `sessionStorage` can be switched to another storage.
 
 ```ts
-import { persistentAtom } from '@nanostores/persistent'
+import { persistentAtom } from '@nirtamir2/nanostores-persistent-session-storage'
 
 export const locale = persistentAtom('locale', 'en')
 ```
@@ -31,7 +33,7 @@ export const locale = persistentAtom('locale', 'en')
 ## Install
 
 ```sh
-npm install nanostores @nanostores/persistent
+npm install nanostores @nirtamir2/nanostores-persistent-session-storage
 ```
 
 
@@ -43,11 +45,11 @@ about using the store and subscribing to store’s changes in UI frameworks.
 
 ### Primitive Store
 
-The store with primitive value keeps the whole data in the single `localStorage`
+The store with primitive value keeps the whole data in the single `sessionStorage`
 key.
 
 ```ts
-import { persistentAtom } from '@nanostores/persistent'
+import { persistentAtom } from '@nirtamir2/nanostores-persistent-session-storage'
 
 export const shoppingCart = persistentAtom<Product[]>('cart', [], {
   encode: JSON.stringify,
@@ -55,8 +57,8 @@ export const shoppingCart = persistentAtom<Product[]>('cart', [], {
 })
 ```
 
-This store will keep its value in `cart` key of`localStorage`.
-An empty array `[]` will be initial value on missed key in `localStorage`.
+This store will keep its value in `cart` key of`sessionStorage`.
+An empty array `[]` will be initial value on missed key in `sessionStorage`.
 
 You can change store value by `set` method.
 
@@ -72,10 +74,10 @@ the initial value.
 ### Map Store
 
 There is a special key-value map store. It will keep each key
-in separated `localStorage` key.
+in separated `sessionStorage` key.
 
 ```ts
-import { persistentMap } from '@nanostores/persistent'
+import { persistentMap } from '@nirtamir2/nanostores-persistent-session-storage'
 
 export type SettingsValue = {
   sidebar: 'show' | 'hide',
@@ -104,7 +106,7 @@ By default, the store changes will be synchronized between browser tabs.
 There is a `listen` option to disable synchronization.
 
 ```ts
-import { persistentAtom } from '@nanostores/persistent'
+import { persistentAtom } from '@nirtamir2/nanostores-persistent-session-storage'
 
 export const draft = persistentAtom('draft', '', { listen: false })
 ```
@@ -116,7 +118,7 @@ export const draft = persistentAtom('draft', '', { listen: false })
 or after getting it from the persistent storage.
 
 ```ts
-import { persistentAtom } from '@nanostores/persistent'
+import { persistentAtom } from '@nirtamir2/nanostores-persistent-session-storage'
 
 export const draft = persistentAtom('draft', [], {
   encode (value) {
@@ -135,7 +137,7 @@ export const draft = persistentAtom('draft', [], {
 ### Server-Side Rendering
 
 The store has built-in SSR support. On the server, they will use
-empty objects instead of `localStorage`.
+empty objects instead of `sessionStorage`.
 
 You can manually initialize stores with specific data:
 
@@ -148,10 +150,10 @@ if (isServer) {
 
 ### Persistent Engines
 
-You can switch `localStorage` to any other storage for all used stores.
+You can switch `sessionStorage` to any other storage for all used stores.
 
 ```ts
-import { setPersistentEngine } from '@nanostores/persistent'
+import { setPersistentEngine } from '@nirtamir2/nanostores-persistent-session-storage'
 
 let listeners = []
 function onChange (key, newValue) {
@@ -205,7 +207,7 @@ For TypeScript, we have `PersistentListener` and `PersistentEvent` types
 for events object.
 
 ```ts
-import { PersistentListener, PersistentEvent } from '@nanostores/persistent'
+import { PersistentListener, PersistentEvent } from '@nirtamir2/nanostores-persistent-session-storage'
 
 const events = {
   addEventListener (key: string, callback: PersistentListener) {
@@ -228,7 +230,7 @@ function onChange () {
 
 ### Tests
 
-There is a special API to replace `localStorage` to a fake storage engine
+There is a special API to replace `sessionStorage` to a fake storage engine
 with helpers to change key and get all values.
 
 ```js
@@ -237,7 +239,7 @@ import {
   setTestStorageKey,
   cleanTestStorage,
   getTestStorage,
-} from '@nanostores/persistent'
+} from '@nirtamir2/nanostores-persistent-session-storage'
 
 import { settings } from './storage.js'
 

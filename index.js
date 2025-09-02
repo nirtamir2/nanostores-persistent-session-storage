@@ -6,15 +6,15 @@ let eventsEngine = { addEventListener() {}, removeEventListener() {} }
 
 function testSupport() {
   try {
-    return typeof localStorage !== 'undefined'
+    return typeof sessionStorage !== 'undefined'
     /* c8 ignore next 4 */
   } catch {
-    // In Privacy Mode access to localStorage will return error
+    // In Privacy Mode access to sessionStorage will return error
     return false
   }
 }
 if (testSupport()) {
-  storageEngine = localStorage
+  storageEngine = sessionStorage
 }
 
 export let windowPersistentEvents = {
